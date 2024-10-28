@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "09 - desenvolvimento com django"
+version = "0.1.0"
+description = ""
+authors = ["João Lucas <ylucasslalves@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "*"
+ipython = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
