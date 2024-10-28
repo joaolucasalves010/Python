@@ -1,0 +1,2 @@
+
+print(i in numeros)

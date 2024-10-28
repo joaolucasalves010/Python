@@ -1,0 +1,23 @@
+{
+  "nome": "João Lucas",
+  "sobrenome": "Lima Alves",
+  "endereco": [
+    {
+      "rua": "r1",
+      "numero": 1
+    },
+    {
+      "rua": "r2",
+      "numero": 2
+    }
+  ],
+  "altura": 1.83,
+  "numeros_preferidos": [
+    7,
+    13,
+    14,
+    77
+  ],
+  "dev": true,
+  "nada": null
+}
