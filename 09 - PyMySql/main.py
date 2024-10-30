@@ -42,7 +42,13 @@ with connection:
             {"nome": "Carla", "idade": 17},
             {"nome": "Adryann", "idade": 22},
           )
+          data3 = (
+            ("Marcos", 16),
+            ("Marcelo", 44),
+            ("Franciele", 19)
+          )
           cursor.executemany(f"INSERT INTO {TABLE_NAME} (nome, idade) VALUES (%(nome)s, %(idade)s)", data2)
+          cursor.executemany(f"INSERT INTO {TABLE_NAME} (nome, idade) VALUES(%s, %s)", data3)
           connection.commit()
           opc = input("Deseja cadastrar outro usuário novamente? S/N ")
           if opc.upper() == 'S':
