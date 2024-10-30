@@ -3,7 +3,9 @@ import dotenv
 import os
 
 TABLE_NAME = "customers" # > nome da tabela
-dotenv.load_dotenv() # carregand o dotenv
+dotenv.load_dotenv() # carregando dotenv
+
+# CRUD - CREATE READ UPDATE DELETE
 
 # Conectando com a data base
 connection = pymysql.connect(
@@ -72,3 +74,15 @@ with connection:
             print(user[0], user[1], user[2])
        else:
          print("Obrigado!")
+    
+    with connection.cursor() as cursor:
+       opc = input("Deseja visualizar a tabela? (S/N): ")
+       if opc.upper() == "S":
+          cursor.execute(f"SELECT * FROM {TABLE_NAME}")
+          table = cursor.fetchall()
+          for user in table:
+            print(user[0], user[1], user[2])
+       elif opc.upper() == "N":
+          print("Obrigado!")
+       else:
+        print("Opção indisponível!")
