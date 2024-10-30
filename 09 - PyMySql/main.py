@@ -2,9 +2,10 @@ import pymysql
 import dotenv
 import os
 
-TABLE_NAME = "customers"
-dotenv.load_dotenv()
+TABLE_NAME = "customers" # > nome da tabela
+dotenv.load_dotenv() # carregand o dotenv
 
+# Conectando com a data base
 connection = pymysql.connect(
     host=os.environ["MYSQL_HOST"],
     user=os.environ["MYSQL_USER"],
@@ -32,11 +33,16 @@ with connection:
         while True:
           nome = input("Digite seu nome: ")
           idade = int(input("Digite sua idade: "))
-          data = {
-             "nome": nome,
-             "idade": idade,
-          }
+          data = dict(nome=nome, idade=idade) # Criando dicionário
+          print(data)
           cursor.execute(f'INSERT INTO {TABLE_NAME} (nome, idade) VALUES (%(nome)s, %(idade)s)', data)
+          # Inserindo vários valores com executemany
+          data2 = (
+            {"nome": "Glenda", "idade": 17},
+            {"nome": "Carla", "idade": 17},
+            {"nome": "Adryann", "idade": 22},
+          )
+          cursor.executemany(f"INSERT INTO {TABLE_NAME} (nome, idade) VALUES (%(nome)s, %(idade)s)", data2)
           connection.commit()
           opc = input("Deseja cadastrar outro usuário novamente? S/N ")
           if opc.upper() == 'S':
