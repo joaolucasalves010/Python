@@ -2,6 +2,8 @@ import pymysql
 import dotenv
 import os
 
+import pymysql.cursors
+
 TABLE_NAME = "customers" # > nome da tabela
 dotenv.load_dotenv() # carregando dotenv
 
@@ -13,7 +15,8 @@ connection = pymysql.connect(
     user=os.environ["MYSQL_USER"],
     password=os.environ["MYSQL_USER_PASSWORD"],
     database=os.environ["MYSQL_DATABASE"],
-    charset="utf8mb4"
+    charset="utf8mb4",
+    cursorclass=pymysql.cursors.DictCursor # Fazendo o cursor retornar em formato de dicionário
 )
 
 with connection:
@@ -58,6 +61,7 @@ with connection:
           else:
             break
     
+    # Realizando consulta 
     with connection.cursor() as cursor:
        opc = input("Deseja realizar alguma consulta? (S/N): ")
        if opc.upper() == "S":
@@ -66,7 +70,7 @@ with connection:
             id = int(input("Digite o id aq: "))
             cursor.execute(f"SELECT * FROM {TABLE_NAME} WHERE id = %s", (id, ))
             user = cursor.fetchone()
-            print(user[0], user[1], user[2])
+            print(user["id"], user["nome"], user["idade"])
           elif tipo_opc.lower() == "nome":
             nome = input("Digite o nome do usuário aqui: ")
             cursor.execute(f"SELECT * FROM {TABLE_NAME} WHERE nome = %s", (nome.lower(), ))
@@ -75,14 +79,36 @@ with connection:
        else:
          print("Obrigado!")
     
+    # Visualizando a tabela
     with connection.cursor() as cursor:
        opc = input("Deseja visualizar a tabela? (S/N): ")
        if opc.upper() == "S":
           cursor.execute(f"SELECT * FROM {TABLE_NAME}")
           table = cursor.fetchall()
-          for user in table:
-            print(user[0], user[1], user[2])
+          for row in table:
+            print(row["id"], row["nome"], row["idade"])
        elif opc.upper() == "N":
           print("Obrigado!")
        else:
         print("Opção indisponível!")
+
+    # Apagando com delete
+    with connection.cursor() as cursor:
+       opc = input("Você deseja deletar algum usuário da sua tabela? ")
+       if opc.upper() == 'S':
+          nome_usuario = input("Digite o usuário desejado: ")
+          cursor.execute(f"DELETE FROM {TABLE_NAME} WHERE nome = %s", (nome_usuario, ))
+          connection.commit()
+       else:
+          print("Obrigado!")
+      
+    with connection.cursor() as cursor:
+      opc = input("Você deseja atualizar algum usuário da sua tabela? ")
+      if opc.upper() == 'S':
+        nome = input("Digite o nome: ")
+        idade = int(input("Digite a idade: "))
+        id_usuario = int(input("Digite o id do usuário: "))
+        cursor.execute(f"UPDATE {TABLE_NAME} SET nome=%s, idade=%s WHERE id = %s", (nome, idade, id_usuario))
+        connection.commit()
+      else:
+        print("Obrigado!")
