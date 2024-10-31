@@ -38,7 +38,7 @@ with connection:
         while True:
           nome = input("Digite seu nome: ")
           idade = int(input("Digite sua idade: "))
-          data = dict(nome=nome, idade=idade) # Criando dicionário
+          data = dict(nome=nome.strip(), idade=idade) # Criando dicionário
           print(data)
           cursor.execute(f'INSERT INTO {TABLE_NAME} (nome, idade) VALUES (%(nome)s, %(idade)s)', data)
           # Inserindo vários valores com executemany
@@ -112,3 +112,19 @@ with connection:
         connection.commit()
       else:
         print("Obrigado!")
+
+      result_from_select = cursor.execute(f"SELECT * FROM {TABLE_NAME}")  
+      print('For 1: ')
+      row_in_table = 0
+      for row in cursor.fetchall():
+         print(row)
+         row_in_table += 1
+
+      usuario = {"nome": "Maria Clara", "idade": 16}
+  
+      cursor.execute(f"INSERT INTO {TABLE_NAME} (nome, idade) VALUES (%(nome)s, %(idade)s)", usuario)
+      connection.commit()
+      print(f'Table Rows: {row_in_table}')
+      print(f'Table Rows:', cursor.rowcount) 
+      print(f"lastrowid ", cursor.lastrowid)
+      
